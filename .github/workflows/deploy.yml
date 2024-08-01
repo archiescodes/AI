@@ -21,7 +21,10 @@ jobs:
         export_default_credentials: true
 
     - name: Authenticate to GKE
-      run: gcloud container clusters get-credentials clustermicro --zone us-central1-a --project apythonapp-424421
+      run: |
+        gcloud auth activate-service-account --key-file=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
+        gcloud container clusters get-credentials clustermicro --zone us-central1-a --project ${{ secrets.GCP_PROJECT_ID }}
 
     - name: Configure Docker
       run: gcloud auth configure-docker
@@ -35,4 +38,4 @@ jobs:
     - name: Deploy to GKE
       run: |
         kubectl apply -f deployment.yaml
-      
+        kubectl apply -f service.yaml
