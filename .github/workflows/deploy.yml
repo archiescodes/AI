@@ -36,7 +36,7 @@ jobs:
 
     - name: Create Kubernetes Secret for Google API Key
       run: |
-        kubectl create secret generic google-api-key --from-literal= ${{ secrets.GOOGLE_API_KEY }}
+        kubectl create secret generic google-api-key --from-literal=GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}
 
     - name: Delete previous deployment and service
       run: |
