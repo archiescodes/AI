@@ -18,13 +18,15 @@ jobs:
       with:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
         service_account_key: ${{ secrets.GCP_SA_KEY }}
-        export_default_credentials: true
+        export_default_credentials: true  # Optional, if you want to export ADC
 
-    
-    - name: Authenticate to GKE
+    - name: Authenticate to Google Cloud
       run: |
         gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
-        gcloud auth application-default login
+        gcloud auth list  # Optional, to verify the active account
+
+    - name: Authenticate to GKE
+      run: |
         gcloud container clusters get-credentials clustermicro --zone us-central1-a --project ${{ secrets.GCP_PROJECT_ID }}
 
     - name: Configure Docker
