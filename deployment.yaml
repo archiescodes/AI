@@ -20,8 +20,11 @@ spec:
         ports:
         - containerPort: 5000
         env:
-        - name: API_KEY
-          value: "AIzaSyDXmv27RyGXqvQO-ncUGu_I53UpNRZ4Y9Y"
+        - name: GOOGLE_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: google-api-key
+              key: api-key
 ---
 apiVersion: v1
 kind: Service
