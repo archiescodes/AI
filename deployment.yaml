@@ -21,10 +21,7 @@ spec:
         - containerPort: 5000
         env:
         - name: GOOGLE_API_KEY
-          valueFrom:
-            secretKeyRef:
-              name: google-api-key
-              key: api-key
+          value: ${{ secrets.GOOGLE_API_KEY }}
 ---
 apiVersion: v1
 kind: Service
