@@ -31,6 +31,11 @@ jobs:
     - name: Install gke-gcloud-auth-plugin
       run: |
         gcloud components install gke-gcloud-auth-plugin
+
+    - name: Delete previous deployment and service
+      run: |
+        kubectl delete deployment text-generation-app --ignore-not-found
+        kubectl delete service text-generation-app --ignore-not-found
         
     - name: Configure Docker
       run: gcloud auth configure-docker
@@ -44,4 +49,16 @@ jobs:
     - name: Deploy to GKE
       run: |
         kubectl apply -f deployment.yaml
+
+    - name: Wait for LoadBalancer IP
+      run: |
+        echo "Waiting for LoadBalancer IP..."
+        sleep 60  # Adjust based on your setup
+        kubectl get services text-generation-app
+        kubectl get ingress  # If using Ingress
+
+    - name: Test Application
+      run: |
+        EXTERNAL_IP=$(kubectl get services text-generation-app -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+        curl -f http://$EXTERNAL_IP || exit 1
         
